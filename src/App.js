@@ -1,5 +1,8 @@
 import React from 'react';
 import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom';
+
+import Login from './components/frontend/auth/Login';
+import Register from './components/frontend/auth/Register';
 import Home from './components/frontend/Home';
 
 import MasterLayout from './layouts/admin/MasterLayout';
@@ -10,6 +13,11 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
+          
+          <Route path='/login' Component={Login}/>
+          <Route path='/register' Component={Register}/>
+
+
           <Route path="/" element={<Home/>} />
           <Route path="/admin" element={<MasterLayout />}>
             {routes
