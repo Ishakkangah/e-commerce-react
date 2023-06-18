@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import {BrowserRouter as Router, Navigate, Route, Routes} from 'react-router-dom';
+import Home from './components/frontend/Home';
+
+import MasterLayout from './layouts/admin/MasterLayout';
+import routes from './routes/routes';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home/>} />
+          <Route path="/admin" element={<MasterLayout />}>
+            {routes
+              .filter(route => route.component)
+              .map(({ path, component: Component }) => (
+                <Route
+                  key={path}
+                  path={path}
+                  element={<Component />}
+                />
+              )
+            )}
+            <Route index element={<Navigate to="/admin/dashboard"/>} />
+          </Route>
+        </Routes>
+      </Router>
     </div>
   );
 }
