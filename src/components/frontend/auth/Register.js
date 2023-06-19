@@ -7,6 +7,7 @@ function Register() {
     name: "",
     email: "",
     password: "",
+    error_list: [],
   });
 
   const handleInput = (e) => {
@@ -24,10 +25,15 @@ function Register() {
     };
     axios.get("/sanctum/csrf-cookie").then((response) => {
       axios.post("/api/register", data).then((res) => {
-        if ((res.status = 200)) {
+        if (res.data.status === 200) {
           console.log("berhasil");
+          localStorage.setItem("auth.token", res.data.token);
+          localStorage.setItem("auth.username", res.data.usename);
         } else {
-          console.log(res.data.validation_errors);
+          setRegister({
+            ...registerInput,
+            error_list: res.data.validation_errors,
+          });
         }
       });
     });
@@ -43,8 +49,8 @@ function Register() {
               <div className="card-header">
                 <h2>Register</h2>
               </div>
-              <form onChange={registerSubmit}>
-                <div className="card-body">
+              <div className="card-body">
+                <form onSubmit={registerSubmit}>
                   <div className="form-group mb-2">
                     <label htmlFor="name" className="form-label require">
                       Fullname
@@ -58,6 +64,9 @@ function Register() {
                       onChange={handleInput}
                       value={registerInput.name}
                     />
+                    <div id="emailHelp" className="form-text text-danger">
+                      {registerInput.error_list.name}
+                    </div>
                   </div>
                   <div className="form-group mb-2">
                     <label htmlFor="email" className="form-label require">
@@ -72,6 +81,9 @@ function Register() {
                       onChange={handleInput}
                       value={registerInput.email}
                     />
+                    <div id="emailHelp" className="form-text text-danger">
+                      {registerInput.error_list.email}
+                    </div>
                   </div>
                   <div className="form-group mb-2">
                     <label htmlFor="password" className="form-label require">
@@ -86,6 +98,9 @@ function Register() {
                       onChange={handleInput}
                       value={registerInput.password}
                     />
+                    <div id="emailHelp" className="form-text text-danger">
+                      {registerInput.error_list.password}
+                    </div>
                   </div>
                   <div className="form-group mb-2">
                     <button
@@ -95,8 +110,8 @@ function Register() {
                       Register
                     </button>
                   </div>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
           </div>
         </div>
