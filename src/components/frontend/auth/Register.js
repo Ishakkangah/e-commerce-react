@@ -1,8 +1,12 @@
 import axios from "axios";
 import React, { useState } from "react";
 import Navbar from "../../../layouts/frontend/Navbar";
+import { useNavigate } from "react-router-dom";
+
+import swal from "sweetalert";
 
 function Register() {
+  const Navigate = useNavigate();
   const [registerInput, setRegister] = useState({
     name: "",
     email: "",
@@ -28,7 +32,9 @@ function Register() {
         if (res.data.status === 200) {
           console.log("berhasil");
           localStorage.setItem("auth.token", res.data.token);
-          localStorage.setItem("auth.username", res.data.usename);
+          localStorage.setItem("auth.username", res.data.username);
+          swal("Good job!", res.data.message, "success");
+          Navigate("/");
         } else {
           setRegister({
             ...registerInput,
